@@ -1,0 +1,58 @@
+//index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sending Mail Through JSP</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width">
+</head>
+<body bgcolor="khaki">
+<form action="mailJSP.jsp">
+<table><tr><td><b><font color="red">To:
+</td>
+<td><b><b><input type="text" name="mail" value="Enter sender mail-id"/><br/>
+</td></tr>
+<tr><td>
+<b><font color="red">Subject:</td>
+<td>
+<input type="text" name="sub" value="Enter Subject Line"><br/>
+</td></tr>
+<tr><td>
+<b><font color="red">Message Text:
+</td>
+<td>
+<textarea rows="12" cols="80" name="mess"></textarea><br/>
+</td></tr>
+<tr><td>
+<input type="submit" value="Send">
+</td>
+<td>
+<input type="reset" value="Reset">
+</td></tr>
+</table></form></body></html>
+
+
+
+//mailJSP.jsp
+<%@ page import="java.util.*,javax.mail.*"%>
+<%@ page import="javax.mail.internet.*" %>
+<%
+String result;
+final String to = request.getParameter("mail"); final String subject = request.getParameter("sub"); final String messg = request.getParameter("mess"); final String from = "enter your gmail-id";
+final String pass = "enter your gmail-password"; String host = "smtp.gmail.com";
+Properties props = new Properties(); props. Put("mail.smtp.host", host);
+props. Put("mail.transport.protocol", "smtp"); props.put("mail.smtp.auth", "true"); props.put("mail.smtp.starttls.enable", "true"); props.put("mail.user", from); props.put("mail.password", pass); props.put("mail.port", "465");
+Session mailSession = Session.getInstance(props, new javax.mail.Authenticator() {
+
+@Override
+protected PasswordAuthentication getPasswordAuthentication() { return new Password Authentication(from, pass);} });
+try {
+MimeMessage message = new MimeMessage(mailSession); message.setFrom(new InternetAddress(from)); message.addRecipient(Message.RecipientType.TO,
+new InternetAddress(to)); message.setSubject(subject); message.setText(messg); Transport.send(message);
+result = "Your mail sent successfully... "; } catch (MessagingException mex)
+{ mex.printStackTrace();
+result = "Error: unable to send mail. .."; }
+%>
+<title>Sending Mail in JSP</title>
+<h1><center><font color="blue">Sending Mail Using JSP</font></h1>
+<b><center><font color="red"><% out.println(result);%></b>
